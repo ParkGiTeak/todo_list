@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:todo_list/main.dart';
+import 'package:todo_list/model/todo.dart';
 
-class CreateScreen extends StatelessWidget {
+class CreateScreen extends StatefulWidget {
   const CreateScreen({super.key});
+
+  @override
+  State<CreateScreen> createState() => _CreateScreenState();
+}
+
+class _CreateScreenState extends State<CreateScreen> {
+  final _textController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +25,18 @@ class CreateScreen extends StatelessWidget {
         title: Text('Todo 작성'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              await todos.add(
+                Todo(
+                  title: _textController.text,
+                  dateTime: DateTime.now().millisecondsSinceEpoch,
+                ),
+              );
+
+              if (mounted) {
+                Navigator.pop(context);
+              }
+            },
             icon: Icon(Icons.done),
           ),
         ],
@@ -18,6 +44,7 @@ class CreateScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
+          controller: _textController,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10.0),

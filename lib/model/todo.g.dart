@@ -3,15 +3,44 @@
 part of 'todo.dart';
 
 // **************************************************************************
-// JsonSerializableGenerator
+// TypeAdapterGenerator
 // **************************************************************************
 
-Todo _$TodoFromJson(Map<String, dynamic> json) => Todo(
-  title: json['title'] as String,
-  dateTime: (json['dateTime'] as num).toInt(),
-);
+class TodoAdapter extends TypeAdapter<Todo> {
+  @override
+  final int typeId = 0;
 
-Map<String, dynamic> _$TodoToJson(Todo instance) => <String, dynamic>{
-  'title': instance.title,
-  'dateTime': instance.dateTime,
-};
+  @override
+  Todo read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Todo(
+      title: fields[1] as String,
+      dateTime: fields[2] as int,
+    )..id = fields[0] as int?;
+  }
+
+  @override
+  void write(BinaryWriter writer, Todo obj) {
+    writer
+      ..writeByte(3)
+      ..writeByte(0)
+      ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.title)
+      ..writeByte(2)
+      ..write(obj.dateTime);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TodoAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}

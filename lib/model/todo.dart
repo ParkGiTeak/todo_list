@@ -1,18 +1,18 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:hive/hive.dart';
 
 part 'todo.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@HiveType(typeId: 0)
 class Todo {
+  @HiveField(0)
+  int? id;
+  @HiveField(1)
   String title;
+  @HiveField(2)
   int dateTime;
 
   Todo({
     required this.title,
     required this.dateTime,
   });
-
-  factory Todo.fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TodoToJson(this);
 }
