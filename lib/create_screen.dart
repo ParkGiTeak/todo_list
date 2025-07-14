@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list/main.dart';
 import 'package:todo_list/model/todo.dart';
+import 'package:uuid/uuid.dart';
 
 class CreateScreen extends StatefulWidget {
   const CreateScreen({super.key});
@@ -26,8 +27,11 @@ class _CreateScreenState extends State<CreateScreen> {
         actions: [
           IconButton(
             onPressed: () async {
-              await todos.add(
+              final String newTodoId = Uuid().v4();
+              await todos.put(
+                newTodoId,
                 Todo(
+                  id: newTodoId,
                   title: _textController.text,
                   dateTime: DateTime.now().millisecondsSinceEpoch,
                 ),
